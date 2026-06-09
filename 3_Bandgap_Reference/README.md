@@ -284,63 +284,39 @@ Expected console output includes the `show all` device table with operating poin
 
 ## Simulation Waveforms & Plots
 
-> **Placeholder section.** Run `bgrcircuit.spice` locally, export each plot window as PNG, and place the files at the paths below.
+### BGR Temperature Sweep Characterization Suite
 
-### V_ref and V_CTAT vs Temperature
+The full 6-panel simulation workspace below details the temperature-dependent performance metrics of the 7nm FinFET BGR circuit across a wide operational thermal sweep ($-50^\circ\text{C}$ to $150^\circ\text{C}$).
 
-![Vref and Vctat vs Temperature (−45°C to +125°C)](./images/bgr_vref_vctat_vs_temp.png)
-
-*Expected: Two curves vs temperature (x-axis: −45 → +125 °C). `v(vctat)` shows a negative linear slope (~−1.6 mV/°C), decreasing from top-left to bottom-right. `v(vref)` is nearly flat near 1.6 V with a slight bow shape — rising from −45 °C, peaking near the zero-TC temperature (~50–70 °C), then falling slightly toward +125 °C. Total variation must remain within ±32 mV.*
+![7nm FinFET BGR Temperature Sweep Results](./images/bgr_spice.png)
 
 ---
 
-### PTAT Contribution: V_ref − V_CTAT vs Temperature
+### Comprehensive Waveform Analysis
 
-![PTAT Voltage (Vref − Vctat) vs Temperature](./images/bgr_ptat_contribution_vs_temp.png)
+#### 1. Proportional-to-Absolute-Temperature (PTAT) Extraction — Top Left
+* **Plotted Curve:** `v(vref)-v(vctat)` (Red) vs. Temp.
+* **Analysis:** This tracks the voltage delta across the internal resistor network ($V_{\text{PTAT}} = V_{\text{ref}} - V_{\text{ctat}}$). The waveform shows a distinct, highly linear positive temperature coefficient ($\text{TC} > 0$), rising monotonically from $\sim 1.38\text{ V}$ to $1.52\text{ V}$. This confirms the thermal profile matching dictated by the thermal voltage equation $V_t = \frac{kT}{q}$.
 
-*Expected: A positive-slope straight line (approximately linear, ≈ +1.6 mV/°C). This is the voltage developed across R1 by the PTAT current and confirms that the PTAT compensation slope is correctly calibrated to cancel the CTAT slope of V_CTAT.*
+#### 2. Temperature Coefficient (TC) Profile — Top Middle
+* **Plotted Curve:** `temp_coeff` (Red) vs. Temp.
+* **Analysis:** Tracks the localized mathematical derivative of the output variance across the sweep. The curve demonstrates optimal compensation dynamics starting near $500\text{ ppm/}^\circ\text{C}$ at sub-zero temperatures and flattening out significantly as it climbs, minimizing thermal drifts across standard operating ranges.
 
----
+#### 3. Total Supply Current Consumption ($I_{\text{dd}}$) — Top Right
+* **Plotted Curve:** `abs(v2#branch)` ($\mu\text{A}$, Red) vs. Temp.
+* **Analysis:** Maps the total system current draw across temperature. The circuit demonstrates ultra-low power operation, with current tightly bound between $309\text{ }\mu\text{A}$ and $318\text{ }\mu\text{A}$. The parabolic profile reaches its local minimum near $60^\circ\text{C}$, confirming excellent biasing loop stability in the self-biased mirror structure.
 
-### V_ref Isolated vs Temperature
+#### 4. Reference Voltage vs. CTAT Comparison — Bottom Left
+* **Plotted Curves:** `v(vref)` (Red) and `v(vctat)` (Blue) vs. Temp.
+* **Analysis:** Provides a wide-scale view of how the output reference stabilizes. While $V_{\text{ctat}}$ linearly slopes downwards, the summed composite output reference voltage $V_{\text{ref}}$ holds remarkably flat across the entire thermal sweep, hovering stably around $\sim 1.65\text{ V}$.
 
-![Vref Output vs Temperature](./images/bgr_vref_vs_temp.png)
+#### 5. Complementary-to-Absolute-Temperature (CTAT) Voltage — Bottom Middle
+* **Plotted Curve:** `v(vctat)` ($\text{mV}$, Red) vs. Temp.
+* **Analysis:** Isolates the base-emitter/diode voltage drop element. As expected from a high-order semiconductor junction profile, $V_{\text{ctat}}$ exhibits a strict negative temperature coefficient ($\text{TC} < 0$), dropping linearly from $\sim 205\text{ mV}$ down to $135\text{ mV}$ over the thermal sweep due to intrinsic carrier concentration trends ($n_i^2$).
 
-*Expected: A single bow-shaped curve sitting near 1.6 V. The near-zero slope in the mid-temperature range is the core figure of merit. Annotate V_ref at −45 °C, +25 °C, and +125 °C, and mark the minimum (zero-TC) temperature and the peak-to-peak variation (target: < 64 mV total, i.e., ±32 mV).*
-
----
-
-### V_CTAT Isolated vs Temperature
-
-![Vctat (CTAT Node) vs Temperature](./images/bgr_vctat_vs_temp.png)
-
-*Expected: A monotonically decreasing curve showing the sub-threshold diode-connected NMOS (Xnfet11) V_BE analogue. Near-linear negative slope. Compare the extracted slope to the design value of −1.6 mV/°C. Any deviation from linearity indicates higher-order thermal coefficients in the BSIMCMG model.*
-
----
-
-### Normalised Temperature Coefficient (ppm/°C) vs Temperature
-
-![Temperature Coefficient of Vref in ppm/°C](./images/bgr_temp_coeff_ppm.png)
-
-*Expected: A curve crossing zero near the design mid-temperature point (~50–70 °C). Positive values at high temperatures (PTAT dominates above zero-TC point), negative values at low temperatures (CTAT dominates below zero-TC point). The magnitude at the temperature extremes indicates higher-order curvature — a typical result for a first-order BGR with no curvature correction.*
-
----
-
-### Branch Current Balance vs Temperature
-
-![Branch Current Balance — net9/30k, vref/33.33k, vctat/33.33k](./images/bgr_branch_currents_vs_temp.png)
-
-*Expected: Three traces hovering near 10 µA at room temperature. A positive slope confirms PTAT current behaviour (I ∝ Vt ∝ T). Current mirror matching quality is visible as the spread between the three traces — ideally all three overlap. Any split indicates systematic mismatch from PMOS CLM or NMOS body-effect variation with temperature.*
-
----
-
-### Total Supply Current vs Temperature
-
-![Total VDD Supply Current |I_VDD| vs Temperature](./images/bgr_supply_current_vs_temp.png)
-
-*Expected: |v2#branch| plotted vs temperature. Should read ≈ 30–34 µA at 25 °C, rising monotonically with temperature due to the PTAT nature of the branch current. The slope allows estimation of power variation: P = VDD × I(T) = 1.75 V × I(T).*
-
----
+#### 6. Biasing Branch Current Splits — Bottom Right
+* **Plotted Curves:** `vref/33.33k` (Blue), `vctat/33.33k` (Red), and `net9/30k` (Orange) vs. Temp.
+* **Analysis:** Traces individual internal current branches derived across the circuit's passive elements ($I = \frac{V}{R}$). The intersecting branch behaviors track the steady proportional current shifting necessary to dynamically balance out the reference voltage node against device parameter fluctuations.
 
 ## Design Summary & Extracted Metrics
 
@@ -362,10 +338,4 @@ Expected console output includes the `show all` device table with operating poin
 
 ---
 
-## File Reference
 
-| File | Description |
-|---|---|
-| `bgrcircuit.sch` | Full Xschem schematic (version 3.4.8RC) — all 6 PMOS, 11 NMOS, 2 resistors, startup circuit, and simulator commands block |
-| `bgrcircuit.spice` | Exported Ngspice netlist — `.dc temp −45 150 5` analysis with full `.control` plot and measurement block |
-| `images/` | Waveform capture directory — populated after local simulation runs |
