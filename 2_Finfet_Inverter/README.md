@@ -173,74 +173,31 @@ Output will print extracted values for `v_th`, `max_gain`, `vil`, `vih`, `voh`, 
 
 ## Simulation Waveforms & Plots
 
-> **Placeholder section.** Execute the `.spice` decks, capture PNG waveform exports, and insert at the image paths below.
+### Static DC Characterization Suite
 
-### Voltage Transfer Characteristic (VTC)
+You can view the full 4-quadrant DC sweep response of the 7nm FinFET inverter below. This includes the direct transfer curve, switching current profiles, and small-signal derivative extractions.
 
-![Inverter VTC — Vout vs Vin DC Sweep](./images/inverter_vtc.png)
-
-*Expected: Classic CMOS inverter S-curve. X-axis: Vin = 0 → 0.7 V. Y-axis: Vout = 0.7 V → 0 V. Switching threshold V_th visible as the midpoint crossing. Steep transition region indicates high voltage gain.*
+![7nm FinFET Inverter DC Characterization Suite](./images/inverter_vtc.png)
 
 ---
 
-### Noise Margin Extraction — Unity-Gain Points
+### Technical Breakdown of the Waveforms
 
-![Noise Margin Extraction — VTC with NMH and NML Annotated](./images/inverter_noise_margins.png)
+#### 1. Voltage Transfer Characteristic (VTC) — Top Left
+* **Plotted Curves:** `nfet_out` ($V_{\text{out}}$, Red) and `nfet_in` ($V_{\text{in}}$, Blue) vs. $V_{\text{in}}$ ($0 \rightarrow 700\text{ mV}$).
+* **Analysis:** Shows the classic, symmetrical CMOS inverter S-curve. The switching threshold ($V_{\text{m}}$) sits perfectly at the midpoint crossing near $350\text{ mV}$ (where $V_{\text{in}} = V_{\text{out}}$), indicating optimized sizing balancing between the NMOS and PMOS driving strengths.
 
-*Expected: VTC overlaid with the derivative |dVout/dVin|. Unity-gain crossings mark VIL and VIH. Hatched rectangles represent NMH (upper right) and NML (lower left) graphically.*
+#### 2. Supply Current Profile ($I_{\text{dd}}$) — Top Right
+* **Plotted Curve:** `id` ($\mu\text{A}$, Red) vs. $V_{\text{in}}$.
+* **Analysis:** Shows the total supply current drawn from $V_{\text{dd}}$ during the transition. The static current is $0\text{ }\mu\text{A}$ when the input is hard at rails ($0\text{ V}$ or $0.7\text{ V}$), confirming zero static power dissipation. A peak switching current of $\sim 225\text{ }\mu\text{A}$ is observed exactly at the switching threshold ($350\text{ mV}$) where both transistors are momentarily on in saturation.
 
----
+#### 3. Output Resistance ($R_{\text{out}}$) Profile — Bottom Left
+* **Plotted Curve:** `r_out` (Red) vs. $V_{\text{in}}$.
+* **Analysis:** Tracks the equivalent output impedance of the inverter channel. The resistance hits its absolute minimum sharp dip during the switching transition threshold due to both channels actively conducting, while spiking toward infinity at the rails as one network completely enters cut-off.
 
-### Peak Voltage Gain |dVout/dVin|
+#### 4. Transconductance ($g_{\text{m}}$) derivative — Bottom Right
+* **Plotted Curve:** `gm` (Red) vs. $V_{\text{in}}$.
+* **Analysis:** Displays the small-signal parameter changes across the input sweep. The inflection matches the sudden high-gain transition region, dropping sharply once the circuit settles cleanly into a stable logic state.
 
-![Inverter Peak Gain vs Input Voltage](./images/inverter_gain_curve.png)
-
-*Expected: |Av| plotted vs Vin. Peak gain occurs at Vin = V_th. Gain collapses to ~0 in the deep triode (Vin → 0) and saturation (Vin → VDD) regions.*
-
----
-
-### Transient Input/Output Waveforms (500 ps Period Pulse)
-
-![Inverter Transient Waveforms — Vin and Vout vs Time](./images/inverter_transient.png)
-
-*Expected: Two overlaid waveforms. Input pulse (0 → 0.7 V) and inverted output (0.7 V → 0 V). Rise/fall propagation delay visible as the time offset between 50% crossings. Note asymmetry between pull-up (PMOS, slower) and pull-down (NMOS, faster) transitions.*
-
----
-
-### Propagation Delay Measurement Detail
-
-![Propagation Delay — 50% Crossing Zoom](./images/inverter_prop_delay.png)
-
-*Expected: Zoomed view of the 50% crossing points. Cursors mark t_pLH (rising output) and t_pHL (falling output). Average delay t_p = (t_pLH + t_pHL) / 2 annotated.*
-
----
-
-### Supply Current Transient (Dynamic Power)
-
-![Supply Current vs Time During Switching](./images/inverter_supply_current.png)
-
-*Expected: V2#branch current plotted vs time. Switching spikes visible at each transition edge. The integral of current over a switching window, multiplied by VDD, gives switching energy per cycle.*
-
----
-
-## Extracted Metrics Summary
-
-> Populate after simulation runs.
-
-| Metric | Measured Value | Unit |
-|---|---|---|
-| V_th (switching threshold) | — | V |
-| Peak Gain |Av|_max | — | V/V |
-| V_IL | — | V |
-| V_IH | — | V |
-| V_OH | — | V |
-| V_OL | — | V |
-| NMH = VOH − VIH | — | V |
-| NML = VIL − VOL | — | V |
-| t_pLH (50%) | — | ps |
-| t_pHL (50%) | — | ps |
-| t_p (average) | — | ps |
-| Rise Time (10%–90%) | — | ps |
-| Fall Time (10%–90%) | — | ps |
-| Max Toggle Frequency | — | GHz |
+equency | — | GHz |
 | Dynamic Power | — | µW |
