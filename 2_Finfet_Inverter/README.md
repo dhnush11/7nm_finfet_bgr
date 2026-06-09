@@ -14,6 +14,8 @@ This module characterizes a minimum-sized 7nm CMOS inverter operating at **VDD =
 
 ### Schematic Topology
 
+![7nm FinFET Inverter DC Characterization Schematic](./images/inverter_sch.png)
+
 Both schematics implement the same canonical CMOS complementary inverter:
 
 ```
