@@ -32,6 +32,8 @@ The circuit targets a **process-independent 1.6 V reference output (vref)** with
 
 ## Circuit Architecture
 
+![7nm FinFET BGR Schematic](./images/bgr_sch.png)
+
 The full circuit is drawn in `bgrcircuit.sch` (Xschem 3.4.8RC) and exported to `bgrcircuit.spice`. It contains **6 PMOS** and **11 NMOS** FinFET devices plus 2 resistors, organised into five distinct functional sub-blocks.
 
 ```
@@ -317,25 +319,4 @@ The full 6-panel simulation workspace below details the temperature-dependent pe
 #### 6. Biasing Branch Current Splits — Bottom Right
 * **Plotted Curves:** `vref/33.33k` (Blue), `vctat/33.33k` (Red), and `net9/30k` (Orange) vs. Temp.
 * **Analysis:** Traces individual internal current branches derived across the circuit's passive elements ($I = \frac{V}{R}$). The intersecting branch behaviors track the steady proportional current shifting necessary to dynamically balance out the reference voltage node against device parameter fluctuations.
-
-## Design Summary & Extracted Metrics
-
-> Populate after simulation runs.
-
-| Metric | Target | Measured | Unit |
-|---|---|---|---|
-| V_ref at 27 °C | 1.6 | — | V |
-| V_ref variation (−45 to +125 °C) | ≤ ±32 mV | — | mV |
-| Zero-TC temperature | ~60 | — | °C |
-| Temperature coefficient (ppm/°C) | < 150 | — | ppm/°C |
-| I_branch at 27 °C | ~10 | — | µA |
-| Total I_VDD at 27 °C | ~30–34 | — | µA |
-| Total power at 27 °C | < 60 | — | µW |
-| V_CTAT slope | ~−1.6 | — | mV/°C |
-| PTAT slope (V_ref − V_CTAT) | ~+1.6 | — | mV/°C |
-| R2 (PTAT resistor) | 33 | 33 | kΩ |
-| R1 (reference summing) | 50 | 50 | kΩ |
-
----
-
 
