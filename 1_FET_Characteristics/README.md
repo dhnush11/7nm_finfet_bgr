@@ -14,6 +14,8 @@ This module characterizes the fundamental DC electrical behavior of the `asap_7n
 
 ### NMOS Characterization Testbench (`nfet_char.sch` / `nfet_char.spice`)
 
+![NMOS Characteristics Schematic](./images/nmos_sch.png)
+
 The testbench topology is a **single-transistor drain-current measurement** configuration. A sense resistor (R1 = 1 kΩ) sits between the drain-supply node `vdd` and the drain terminal `nfet_out`; the transistor source and bulk are both tied to `GND`. Two independent voltage sources sweep the bias conditions:
 
 ```
