@@ -1,0 +1,123 @@
+# =============================================================================
+# .gitignore — ASAP7 FinFET Design Repository
+# Xschem + Ngspice simulation artifacts, swap files, OSDI binaries
+# =============================================================================
+
+# ---------------------------------------------------------------------------
+# Ngspice simulation output
+# ---------------------------------------------------------------------------
+# Raw binary waveform data files
+*.raw
+*.data
+*.out
+
+# Ngspice log and error output
+*.log
+ngspice.log
+ngspice_err.log
+spice.log
+
+# Ngspice batch output / print redirects
+*.lst
+
+# Ngspice hash/cache files
+*.hash
+
+# Ngspice shared-memory IPC sockets (interactive mode)
+/tmp/ngspice*
+
+# ---------------------------------------------------------------------------
+# Xschem editor artifacts
+# ---------------------------------------------------------------------------
+# Vim-style swap files generated when Xschem has a schematic open
+*.sch.swp
+*.spice.swp
+*.sym.swp
+.*.swp
+.*.swo
+
+# Xschem backup files
+*.bak
+*.sch~
+*.sym~
+
+# Xschem simulation / netlisting temp files
+*.net
+*.cdl
+
+# ---------------------------------------------------------------------------
+# OSDI compiled binaries
+# ---------------------------------------------------------------------------
+# The bsimcmg.osdi binary is architecture-specific; each user compiles locally
+*.osdi
+*.so
+
+# OpenVAF intermediate objects
+*.o
+*.d
+
+# ---------------------------------------------------------------------------
+# Waveform and plot output (populated locally after simulation)
+# ---------------------------------------------------------------------------
+# PostScript waveform captures (Ngspice hardcopy command)
+*.ps
+*.eps
+
+# PDF intermediates from ps2pdf conversion
+# (final PNGs ARE committed — they populate the README image placeholders)
+images/*.pdf
+images/*.ps
+
+# Gnuplot / Python matplotlib output intermediates
+*.gnuplot
+*.plt
+
+# ---------------------------------------------------------------------------
+# Python simulation scripting artifacts
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# ---------------------------------------------------------------------------
+# OS and editor clutter
+# ---------------------------------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+.nfs*
+
+# JetBrains / VS Code / Eclipse
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+.project
+.settings/
+
+# ---------------------------------------------------------------------------
+# Simulation working directories (auto-generated)
+# ---------------------------------------------------------------------------
+sim_out/
+results/
+scratch/
+tmp/
